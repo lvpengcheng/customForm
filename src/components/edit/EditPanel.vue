@@ -1,5 +1,7 @@
 <template>
-  <div :class="['root-edit-panel animated', { 'slideOutLeft': status === 'close', 'slideInLeft': status === 'expand' }]">
+  <div :class="rootClass"
+       @drop="drop"
+       @dragover="allowDrop">
 
   </div>
 </template>
@@ -9,50 +11,78 @@ import {mapState} from 'vuex'
 
 export default {
   name: 'EditPanel',
-  computed: mapState({
-    status: state => state.LibBar.status
-  })
+  data () {
+    return {
+      rootClass: ['root-edit-panel']
+    }
+  },
+  computed: {
+    ...mapState({
+      LibStatus: state => state.LibBar.status,
+      AttrStatus: state => state.AttrBar.status
+    })
+  },
+  methods: {
+    allowDrop (ev) {
+      ev.preventDefault()
+    },
+    drop (ev) {
+      ev.preventDefault()
+    }
+  },
+  watch: {
+    LibStatus () {
+      this.rootClass = this.rootClass.filter(v => v.indexOf('Left') === -1)
+      this.rootClass.push(this.LibStatus === 'close' ? 'slideOutLeft-my' : 'slideInLeft-my')
+    },
+    AttrStatus () {
+      this.rootClass = this.rootClass.filter(v => v.indexOf('Right') === -1)
+      this.rootClass.push(this.AttrStatus === 'close' ? 'slideOutRight-my' : 'slideInRight-my')
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
   .root-edit-panel {
+    position: relative;
     background: #fff;
     min-width: 750px;
     min-height: 100vh;
   }
 
-  @keyframes slideOutLeft-my-out {
-    from {
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(-200px, 0, 0);
-      transform: translate3d(-200px, 0, 0);
-    }
-  }
-
-  @keyframes slideOutLeft-my-in {
-    from {
-      -webkit-transform: translate3d(-200px, 0, 0);
-      transform: translate3d(-200px, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
+  .slideInLeft-my {
+    transition: all 1s;
+    margin-left: 255px;
+    margin-right: 255px;
+    &.slideInRight-my {
+      transition: all 1s;
+      margin-left: 255px;
+      margin-right: 255px;
     }
   }
 
-  .slideOutLeft {
-    -webkit-animation-name: slideOutLeft-my-out;
-    animation-name: slideOutLeft-my-out;
+  .slideOutLeft-my {
+    transition: all 1s;
+    margin-left: 12px;
+    margin-right: 255px;
+    &.slideOutRight-my {
+      transition: all 1s;
+      margin-left: 12px;
+      margin-right: 12px;
+    }
   }
 
-  .slideInLeft {
-    -webkit-animation-name: slideOutLeft-my-in;
-    animation-name: slideOutLeft-my-in;
+  .slideOutRight-my {
+    transition: all 1s;
+    margin-left: 255px;
+    margin-right: 12px;
   }
+
+  .slideInRight-my {
+    transition: all 1s;
+    margin-left: 12px;
+    margin-right: 255px;
+  }
+
 </style>
