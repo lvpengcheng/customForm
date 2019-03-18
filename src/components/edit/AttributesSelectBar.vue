@@ -5,7 +5,6 @@
         <div class="title">{{item.attr}}</div>
         <div>
           <el-input v-model="item.value"/>
-          {{item.value}}
         </div>
       </li>
     </bar-container>
@@ -26,18 +25,24 @@ export default {
   },
   computed: {
     ...mapState({
-      id: state => state.EditPanel.id
+      id: state => state.EditPanel.uuid,
+      templateArr: state => state.EditPanel.templateArr
     })
   },
   watch: {
     id () {
-      const AllComponents = import('../../datas/AllComponents')
-      AllComponents.then(res => {
-        const component = res.default[this.id]
-        if (component) {
-          this.attrs = component.attrs
-        }
-      })
+      this.attrs = this.templateArr.filter(v => v.uuid === this.id)[0].attrs
+    },
+    attrs: {
+      handler () {
+        this.templateArr.map(v => {
+          if (v.uuid === this.id) {
+            v.attrs = this.attrs
+          }
+        })
+        this.$store.commit('EditPanel/changeTemplateArr', this.templateArr)
+      },
+      deep: true
     }
   }
 }

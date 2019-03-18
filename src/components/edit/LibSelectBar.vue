@@ -27,6 +27,7 @@ export default {
   methods: {
     dragstart (ev, id) {
       ev.dataTransfer.setData('uuid', id)
+      ev.dataTransfer.dropEffect = 'move'
     }
   }
 }

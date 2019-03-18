@@ -32,10 +32,10 @@ export default {
 
     > div {
       width: 250px;
-      margin-left: 50px;
+      margin-left: 20px;
 
       .help {
-        padding: 10px 20px;
+        padding: 10px 0;
         color: @font-tip-color;
         font-size: @font-tip;
       }

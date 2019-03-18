@@ -1,14 +1,19 @@
 const state = {
-  id: ''
+  uuid: '',
+  templateArr: []
 }
 
 const getters = {
-  status: state => state.id
+  uuid: state => state.uuid,
+  templateArr: state => state.templateArr
 }
 
 const mutations = {
   changeId (state, sta) {
-    state.id = sta
+    state.uuid = sta
+  },
+  changeTemplateArr (state, arr) {
+    state.templateArr = arr
   }
 }
 

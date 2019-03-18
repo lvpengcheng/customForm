@@ -2,7 +2,7 @@
   <div :class="rootClass"
        @drop="drop"
        @dragover="allowDrop">
-    <custom-template :html="html"/>
+    <custom-template/>
   </div>
 </template>
 
@@ -15,8 +15,7 @@ export default {
   data () {
     return {
       rootClass: ['root-edit-panel'],
-      AllComponents: import('../../datas/AllComponents'),
-      html: ''
+      AllComponents: import('../../datas/AllComponents')
     }
   },
   components: {
@@ -25,7 +24,8 @@ export default {
   computed: {
     ...mapState({
       LibStatus: state => state.LibBar.status,
-      AttrStatus: state => state.AttrBar.status
+      AttrStatus: state => state.AttrBar.status,
+      temArr: state => state.EditPanel.templateArr
     })
   },
   methods: {
@@ -34,18 +34,32 @@ export default {
     },
     drop (ev) {
       ev.preventDefault()
-      const uuid = ev.dataTransfer.getData('uuid')
+      const id = ev.dataTransfer.getData('uuid')
       this.AllComponents.then(res => {
-        const component = res.default[uuid]
-        const id = +new Date()
-        if (component) {
-          let html = `<div class="content"><${component.tag}`
-          component.attrs.map(v => {
-            html += ` ${v.name}="${v.value}"`
-          })
-          html += `/><div class="mask" :class="{'current': this.current == '${id}'}" @click="doclick('${id}','${uuid}')"></div></div>`
-          this.html += html
-        }
+        const component = res.default[id]
+        const uuid = +new Date()
+        this.temArr.push({
+          id: `${id}`,
+          attrs: component.attrs,
+          uuid: `${uuid}`,
+          tag: component.tag
+        })
+        this.$store.commit('EditPanel/changeTemplateArr', this.temArr)
+        // if (component) {
+        //   let html = `<div class="content"><${component.tag}`
+        //   let arr = this.temArr
+        //   arr[uuid] = {
+        //     id: `${id}`,
+        //     attrs: component.attrs
+        //   }
+        //   this.$store.commit('EditPanel/changeTemplateArr', arr)
+        //
+        //   arr[uuid].attrs.map(v => {
+        //     html += ` ${v.name}="${v.value}"`
+        //   })
+        //   html += `/><div class="mask" :class="{'current': current == '${uuid}'}" @click="doclick('${uuid}','${id}')"></div></div>`
+        //   this.html += html
+        // }
       })
     }
   },
