@@ -1,8 +1,8 @@
 <template>
   <div class="root-edit-page">
     <lib-select-bar/>
-    <edit-panel/>
     <attributes-select-bar/>
+    <edit-panel/>
   </div>
 </template>
 
@@ -19,8 +19,6 @@ export default {
 
 <style lang="less" scoped>
   .root-edit-page {
-    display: flex;
-    justify-content: space-between;
     background: rgb(238, 238, 238);
     overflow-x: hidden;
   }

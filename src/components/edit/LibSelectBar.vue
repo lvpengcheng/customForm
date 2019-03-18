@@ -2,7 +2,7 @@
   <div class="root-lib-select-bar">
     <bar-container>
       <li v-for="item in data" :key="item.id">
-        <img :src="'static/'+item.name+'.png'" alt="">
+        <img :src="'static/'+item.name+'.png'" alt="" @dragstart="dragstart($event, item.name)">
       </li>
     </bar-container>
   </div>
@@ -23,9 +23,17 @@ export default {
         {id: '5', name: 'input-component'}
       ]
     }
+  },
+  methods: {
+    dragstart (ev, id) {
+      ev.dataTransfer.setData('uuid', id)
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+  .root-lib-select-bar {
+    float: left;
+  }
 </style>

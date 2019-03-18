@@ -6,12 +6,15 @@ import router from './router'
 import './public/reset.css'
 import './public/animate.css'
 import ElementUI from 'element-ui'
+import Custom from './components/common'
 import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+
+Vue.use(Custom)
 
 /* eslint-disable no-new */
 new Vue({

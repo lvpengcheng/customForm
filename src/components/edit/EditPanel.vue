@@ -2,19 +2,25 @@
   <div :class="rootClass"
        @drop="drop"
        @dragover="allowDrop">
-
+    <custom-template :html="html"/>
   </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import CustomTemplate from './CustomTemplate.js'
 
 export default {
   name: 'EditPanel',
   data () {
     return {
-      rootClass: ['root-edit-panel']
+      rootClass: ['root-edit-panel'],
+      AllComponents: import('../../datas/AllComponents'),
+      html: ''
     }
+  },
+  components: {
+    CustomTemplate
   },
   computed: {
     ...mapState({
@@ -28,6 +34,19 @@ export default {
     },
     drop (ev) {
       ev.preventDefault()
+      const uuid = ev.dataTransfer.getData('uuid')
+      this.AllComponents.then(res => {
+        const component = res.default[uuid]
+        const id = +new Date()
+        if (component) {
+          let html = `<div class="content"><${component.tag}`
+          component.attrs.map(v => {
+            html += ` ${v.name}="${v.value}"`
+          })
+          html += `/><div class="mask" :class="{'current': this.current == '${id}'}" @click="doclick('${id}','${uuid}')"></div></div>`
+          this.html += html
+        }
+      })
     }
   },
   watch: {
@@ -47,42 +66,51 @@ export default {
   .root-edit-panel {
     position: relative;
     background: #fff;
-    min-width: 750px;
     min-height: 100vh;
-  }
+    margin: 10px 240px;
+    padding: 10px;
 
-  .slideInLeft-my {
-    transition: all 1s;
-    margin-left: 255px;
-    margin-right: 255px;
+    /deep/ .current {
+      border: 1px solid #ffbea3;
+    }
+
+    /deep/ .root-custom-template {
+      > div.content {
+        position: relative;
+        margin: 10px 0;
+
+        > div {
+          padding: 10px;
+        }
+      }
+
+      .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+
+    &.slideInLeft-my {
+      transition: all 1s;
+      margin-left: 245px;
+    }
+
+    &.slideOutLeft-my {
+      transition: all 1s;
+      margin-left: 35px;
+    }
+
     &.slideInRight-my {
       transition: all 1s;
-      margin-left: 255px;
-      margin-right: 255px;
+      margin-right: 245px;
     }
-  }
 
-  .slideOutLeft-my {
-    transition: all 1s;
-    margin-left: 12px;
-    margin-right: 255px;
     &.slideOutRight-my {
       transition: all 1s;
-      margin-left: 12px;
-      margin-right: 12px;
+      margin-right: 35px;
     }
   }
-
-  .slideOutRight-my {
-    transition: all 1s;
-    margin-left: 255px;
-    margin-right: 12px;
-  }
-
-  .slideInRight-my {
-    transition: all 1s;
-    margin-left: 12px;
-    margin-right: 255px;
-  }
-
 </style>

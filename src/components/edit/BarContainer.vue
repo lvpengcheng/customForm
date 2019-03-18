@@ -97,7 +97,7 @@ export default {
 
     .root {
       position: relative;
-      width: 240px;
+      width: 220px;
       height: 100vh;
 
       ul {

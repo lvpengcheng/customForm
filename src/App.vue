@@ -11,4 +11,7 @@ export default {
 </script>
 
 <style>
+  * {
+    font-family: 'PingFang SC', 'Microsoft YaHei';
+  }
 </style>
