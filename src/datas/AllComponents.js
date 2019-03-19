@@ -45,7 +45,28 @@ const data = {
     ]
   },
   'select-component': {
-    tag: 'el-select'
+    tag: 'el-my-select',
+    attrs: [
+      {
+        name: 'title',
+        max: 20,
+        min: 2,
+        value: '这是标题',
+        attr: '标题'
+      },
+      {
+        name: 'help',
+        max: 20,
+        min: 2,
+        value: '这是帮助提示',
+        attr: '填写帮助'
+      },
+      {
+        name: 'list',
+        value: '这是帮助提示',
+        attr: '数组数据'
+      }
+    ]
   }
 }
 

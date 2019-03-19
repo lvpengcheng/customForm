@@ -47,7 +47,7 @@ export default {
     position: relative;
     background: #fff;
     min-height: 100vh;
-    margin: 10px 240px;
+    margin: 0 240px;
     padding: 10px;
 
     /deep/ .current {

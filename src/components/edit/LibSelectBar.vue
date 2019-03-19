@@ -3,7 +3,7 @@
     <bar-container>
       <draggable :list="data" :group="{ name: 'people', pull: 'clone', put: false }" :clone="cloneLib">
         <li v-for="item in data" :key="item.id">
-          <img :src="'static/'+item.name+'.png'" alt=""><!--@dragstart="dragstart($event, item.name)"-->
+          <img :src="'static/'+item.name+'.png'" alt="">
         </li>
       </draggable>
     </bar-container>
@@ -20,29 +20,17 @@ export default {
   data () {
     return {
       data: [
-        {id: '1', name: 'title-component'},
-        // {id: '2', name: 'select-component'},
-        // {id: '3', name: 'textarea-component'},
-        // {id: '4', name: 'time-component'},
-        {id: '5', name: 'input-component'}
+        {name: 'title-component'},
+        {name: 'select-component'},
+        {name: 'input-component'}
       ]
     }
   },
   methods: {
-    dragstart (ev, id) {
-      // ev.dataTransfer.setData('uuid', id)
-      // ev.dataTransfer.dropEffect = 'move'
-    },
     cloneLib (e) {
       const allComponents = require('../../datas/AllComponents')
       const component = allComponents.default[e.name]
       const uuid = +new Date()
-      console.log({
-        id: `${e.name}`,
-        attrs: component.attrs,
-        uuid: `${uuid}`,
-        tag: component.tag
-      })
       return {
         id: `${e.name}`,
         attrs: component.attrs,
