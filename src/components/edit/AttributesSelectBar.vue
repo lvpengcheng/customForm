@@ -32,15 +32,28 @@ export default {
   watch: {
     id () {
       this.attrs = this.templateArr.filter(v => v.uuid === this.id)[0].attrs
+      const attrss = this.templateArr.filter(v => v.uuid === this.id)[0].attrs
+      const attrs = []
+      attrss.forEach(v => {
+        attrs.push({
+          name: v.name,
+          max: v.max,
+          min: v.min,
+          value: v.value,
+          attr: v.attr
+        })
+      })
+      this.attrs = attrs
     },
     attrs: {
       handler () {
-        this.templateArr.map(v => {
+        let arr = this.templateArr.map(v => {
           if (v.uuid === this.id) {
             v.attrs = this.attrs
           }
+          return v
         })
-        this.$store.commit('EditPanel/changeTemplateArr', this.templateArr)
+        this.$store.commit('EditPanel/changeTemplateArr', arr)
       },
       deep: true
     }

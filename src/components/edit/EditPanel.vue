@@ -1,10 +1,11 @@
 <template>
-  <div :class="rootClass"
-       @drop="drop"
-       @dragover="allowDrop">
+  <div :class="rootClass">
     <custom-template/>
   </div>
 </template>
+
+<style>
+</style>
 
 <script>
 import {mapState} from 'vuex'
@@ -15,7 +16,7 @@ export default {
   data () {
     return {
       rootClass: ['root-edit-panel'],
-      AllComponents: import('../../datas/AllComponents')
+      items: ['1', '2', '3']
     }
   },
   components: {
@@ -27,41 +28,6 @@ export default {
       AttrStatus: state => state.AttrBar.status,
       temArr: state => state.EditPanel.templateArr
     })
-  },
-  methods: {
-    allowDrop (ev) {
-      ev.preventDefault()
-    },
-    drop (ev) {
-      ev.preventDefault()
-      const id = ev.dataTransfer.getData('uuid')
-      this.AllComponents.then(res => {
-        const component = res.default[id]
-        const uuid = +new Date()
-        this.temArr.push({
-          id: `${id}`,
-          attrs: component.attrs,
-          uuid: `${uuid}`,
-          tag: component.tag
-        })
-        this.$store.commit('EditPanel/changeTemplateArr', this.temArr)
-        // if (component) {
-        //   let html = `<div class="content"><${component.tag}`
-        //   let arr = this.temArr
-        //   arr[uuid] = {
-        //     id: `${id}`,
-        //     attrs: component.attrs
-        //   }
-        //   this.$store.commit('EditPanel/changeTemplateArr', arr)
-        //
-        //   arr[uuid].attrs.map(v => {
-        //     html += ` ${v.name}="${v.value}"`
-        //   })
-        //   html += `/><div class="mask" :class="{'current': current == '${uuid}'}" @click="doclick('${uuid}','${id}')"></div></div>`
-        //   this.html += html
-        // }
-      })
-    }
   },
   watch: {
     LibStatus () {
@@ -89,7 +55,7 @@ export default {
     }
 
     /deep/ .root-custom-template {
-      > div.content {
+      .content {
         position: relative;
         margin: 10px 0;
 
